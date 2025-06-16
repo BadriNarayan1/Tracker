@@ -47,14 +47,14 @@ class MainActivity : ComponentActivity() {
             TrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = "sign_in", modifier = Modifier.padding(innerPadding)) {
-                        composable("sign_in") {
+                    NavHost(navController, startDestination = Screen.SignInScreen, modifier = Modifier.padding(innerPadding)) {
+                        composable(Screen.SignInScreen.route) {
                             val viewModel = viewModel<SignInViewModel>()
                             val state by viewModel.state.collectAsStateWithLifecycle()
 
                             LaunchedEffect(key1 = Unit) {
                                 if (googleAuthClient.getSignedInUser() != null) {
-                                    navController.navigate("profile")
+                                    navController.navigate(Screen.ProfileScreen.route)
                                 }
                             }
 
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                         "sign in successful",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                    navController.navigate("profile")
+                                    navController.navigate(Screen.ProfileScreen.route)
                                     viewModel.resetState()
                                 }
                             }
@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                         }
-                        composable("profile") {
+                        composable(Screen.ProfileScreen.route) {
                             ProfileScreen(
                                 userData = googleAuthClient.getSignedInUser(),
                                 onSignOut = {
