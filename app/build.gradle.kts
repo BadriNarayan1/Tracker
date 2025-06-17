@@ -6,13 +6,14 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+
 android {
     namespace = "com.example.tracker"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.tracker"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -53,10 +54,18 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
+
+
+
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.1")
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    implementation("com.github.tehras.charts:bar:0.2.4-alpha")
+    implementation("com.github.tehras.charts:pie:0.2.4-alpha")
+    implementation("com.github.tehras.charts:line:0.2.4-alpha")
+
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)

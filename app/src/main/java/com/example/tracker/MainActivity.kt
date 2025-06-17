@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             TrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = Screen.SignInScreen, modifier = Modifier.padding(innerPadding)) {
+                    NavHost(navController, startDestination = Screen.SignInScreen.route, modifier = Modifier.padding(innerPadding)) {
                         composable(Screen.SignInScreen.route) {
                             val viewModel = viewModel<SignInViewModel>()
                             val state by viewModel.state.collectAsStateWithLifecycle()

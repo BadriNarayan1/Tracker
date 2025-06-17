@@ -8,5 +8,6 @@ data class ScheduledActivity(
     val type: String,
     val description: String,
     val youtubeLink: String? = null,
-    val spotifyLink: String? = null
+    val spotifyLink: String? = null,
+    val pdfLink: String? = null
 )
