@@ -50,24 +50,24 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
 
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.google.firebase.firestore)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
 
-
-
-
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.1")
-    implementation("androidx.navigation:navigation-compose:2.9.0")
-    implementation("io.coil-kt:coil-compose:2.5.0")
-
-    implementation("com.github.tehras.charts:bar:0.2.4-alpha")
-    implementation("com.github.tehras.charts:pie:0.2.4-alpha")
-    implementation("com.github.tehras.charts:line:0.2.4-alpha")
+    implementation(libs.bar)
+    implementation(libs.pie)
+    implementation(libs.line)
 
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

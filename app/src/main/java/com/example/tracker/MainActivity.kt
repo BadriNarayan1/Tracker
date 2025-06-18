@@ -45,80 +45,81 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val navController = rememberNavController()
-                    NavHost(navController, startDestination = Screen.SignInScreen.route, modifier = Modifier.padding(innerPadding)) {
-                        composable(Screen.SignInScreen.route) {
-                            val viewModel = viewModel<SignInViewModel>()
-                            val state by viewModel.state.collectAsStateWithLifecycle()
-
-                            LaunchedEffect(key1 = Unit) {
-                                if (googleAuthClient.getSignedInUser() != null) {
-                                    navController.navigate(Screen.ProfileScreen.route)
-                                }
-                            }
-
-                            val launcher = rememberLauncherForActivityResult(
-                                contract = ActivityResultContracts.StartIntentSenderForResult(),
-                                onResult = { result ->
-                                    if (result.resultCode == RESULT_OK) {
-                                        lifecycleScope.launch {
-                                            val signInResult = googleAuthClient.signInWithIntent(
-                                                intent = result.data ?: return@launch
-                                            )
-                                            viewModel.onSignInResult(signInResult)
-                                        }
-                                    }
-                                }
-                            )
-
-                            LaunchedEffect(key1 = state.isSignInSuccessfull) {
-                                if (state.isSignInSuccessfull) {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "sign in successful",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    navController.navigate(Screen.ProfileScreen.route)
-                                    viewModel.resetState()
-                                }
-                            }
-                            SignInScreen(
-                                state = state,
-                                onSignInClick = {
-                                    lifecycleScope.launch {
-                                        val signInIntentSender = googleAuthClient.signIn()
-                                        launcher.launch(
-                                            IntentSenderRequest.Builder(
-                                                signInIntentSender ?: return@launch
-                                            ).build()
-                                        )
-                                    }
-                                }
-                            )
-
-                        }
-                        composable(Screen.ProfileScreen.route) {
-                            ProfileScreen(
-                                userData = googleAuthClient.getSignedInUser(),
-                                onSignOut = {
-                                    lifecycleScope.launch {
-                                        googleAuthClient.signOut()
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Signed out",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                        navController.popBackStack()
-                                    }
-                                }
-                            )
-                        }
-
-                    }
-                }
+                MainView(googleAuthClient)
             }
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                    val navController = rememberNavController()
+//                    NavHost(navController, startDestination = Screen.SignInScreen.route, modifier = Modifier.padding(innerPadding)) {
+//                        composable(Screen.SignInScreen.route) {
+//                            val viewModel = viewModel<SignInViewModel>()
+//                            val state by viewModel.state.collectAsStateWithLifecycle()
+//
+//                            LaunchedEffect(key1 = Unit) {
+//                                if (googleAuthClient.getSignedInUser() != null) {
+//                                    navController.navigate(Screen.ProfileScreen.route)
+//                                }
+//                            }
+//
+//                            val launcher = rememberLauncherForActivityResult(
+//                                contract = ActivityResultContracts.StartIntentSenderForResult(),
+//                                onResult = { result ->
+//                                    if (result.resultCode == RESULT_OK) {
+//                                        lifecycleScope.launch {
+//                                            val signInResult = googleAuthClient.signInWithIntent(
+//                                                intent = result.data ?: return@launch
+//                                            )
+//                                            viewModel.onSignInResult(signInResult)
+//                                        }
+//                                    }
+//                                }
+//                            )
+//
+//                            LaunchedEffect(key1 = state.isSignInSuccessfull) {
+//                                if (state.isSignInSuccessfull) {
+//                                    Toast.makeText(
+//                                        applicationContext,
+//                                        "sign in successful",
+//                                        Toast.LENGTH_LONG
+//                                    ).show()
+//                                    navController.navigate(Screen.ProfileScreen.route)
+//                                    viewModel.resetState()
+//                                }
+//                            }
+//                            SignInScreen(
+//                                state = state,
+//                                onSignInClick = {
+//                                    lifecycleScope.launch {
+//                                        val signInIntentSender = googleAuthClient.signIn()
+//                                        launcher.launch(
+//                                            IntentSenderRequest.Builder(
+//                                                signInIntentSender ?: return@launch
+//                                            ).build()
+//                                        )
+//                                    }
+//                                }
+//                            )
+//
+//                        }
+//                        composable(Screen.ProfileScreen.route) {
+//                            ProfileScreen(
+//                                userData = googleAuthClient.getSignedInUser(),
+//                                onSignOut = {
+//                                    lifecycleScope.launch {
+//                                        googleAuthClient.signOut()
+//                                        Toast.makeText(
+//                                            applicationContext,
+//                                            "Signed out",
+//                                            Toast.LENGTH_LONG
+//                                        ).show()
+//
+//                                        navController.popBackStack()
+//                                    }
+//                                }
+//                            )
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

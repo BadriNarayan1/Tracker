@@ -21,7 +21,7 @@ import com.github.tehras.charts.piechart.PieChart
 import com.github.tehras.charts.piechart.PieChartData
 
 @Composable
-fun ProgressScreen(viewModel: ProgressViewModel) {
+fun ProgressScreen(viewModel: ProgressViewModel = FakeProgressViewModel()) {
     val selectedCategory by viewModel.selectedCategory
     val selectedRange by viewModel.selectedTimeRange
     val chartMode by viewModel.chartMode
