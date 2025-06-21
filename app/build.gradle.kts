@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,19 +8,24 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-
 android {
     namespace = "com.example.tracker"
     compileSdk = 35
-
+    buildFeatures {
+        buildConfig = true // ✅ Enable BuildConfig
+    }
     defaultConfig {
         applicationId = "com.example.tracker"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties().apply {
+            load(rootProject.file("local.properties").inputStream())
+        }
+        buildConfigField("String", "GEMINI_API_KEY", "\"${properties.getProperty("GEMINI_API_KEY")}\"")
     }
 
     buildTypes {
@@ -54,6 +61,10 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
+    implementation("androidx.work:work-gcm:2.9.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.firebase.firestore)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -68,6 +79,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

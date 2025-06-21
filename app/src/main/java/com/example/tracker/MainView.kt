@@ -1,6 +1,9 @@
 package com.example.tracker
 
 
+import LLMScreen
+import LLMViewModel
+import LLMViewModelFactory
 import android.app.Activity.RESULT_OK
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -27,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +47,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tracker.data.repository.GeminiRepository
+import com.example.tracker.data.repository.ProgressRepositoryImpl
 import com.example.tracker.presentation.home.HomeScreen
-import com.example.tracker.presentation.home.dummyActivities
 import com.example.tracker.presentation.sign_in.GoogleAuthUiClient
 import com.example.tracker.presentation.sign_in.SignInScreen
 import com.example.tracker.presentation.sign_in.SignInViewModel
@@ -52,7 +57,11 @@ import kotlinx.coroutines.launch
 
 import com.example.tracker.presentation.profile.ProfileScreen
 import com.example.tracker.presentation.progress.ProgressScreen
-import com.example.tracker.presentation.template.TemplateScreen
+import com.example.tracker.presentation.progress.RealProgressViewModel
+import com.example.tracker.presentation.progress.RealProgressViewModelFactory
+import com.example.tracker.presentation.templates.TemplateNavHost
+import com.example.tracker.presentation.templates.TemplateScreen
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MainView(googleAuthUiClient: GoogleAuthUiClient) {
@@ -197,8 +206,7 @@ fun Navigation(
 //                    ).show()
                     navController.navigate(Screen.SignInScreen.route)
                 }},
-                navController = navController,
-                activities = dummyActivities
+                navController = navController
             )
 //            ProfileScreen(
 //                userData = googleAuthUiClient.getSignedInUser(),
@@ -216,11 +224,27 @@ fun Navigation(
 //            )
         }
         composable(Screen.BottomScreen.Template.broute) {
-            TemplateScreen()
+            googleAuthUiClient.getSignedInUser()?.let { it1 -> TemplateNavHost(it1.userId) }
         }
         composable(Screen.BottomScreen.Progress.broute) {
-            ProgressScreen()
+            val repository = remember { ProgressRepositoryImpl(Injection.instance(), FirebaseAuth.getInstance()) }
+            val factory = remember { RealProgressViewModelFactory(repository) }
+
+            val viewModel: RealProgressViewModel = viewModel(factory = factory)
+
+            ProgressScreen(viewModel = viewModel)
+
         }
+        composable(Screen.BottomScreen.AI.broute) {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+            val repo = GeminiRepository(apiKey = BuildConfig.GEMINI_API_KEY)
+            val viewModel: LLMViewModel = viewModel(factory = LLMViewModelFactory(repo))
+
+            LLMScreen(viewModel = viewModel, userId)
+        }
+//        composable(Screen.AddActivity.route) {
+//            AddActivityScreen(navController) { }
+//        }
     }
 }
 

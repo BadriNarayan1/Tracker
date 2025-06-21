@@ -18,6 +18,7 @@ lifecycleViewmodelCompose = "2.9.1"
 navigationCompose = "2.9.0"
 pie = "0.2.4-alpha"
 playServicesAuth = "21.3.0"
+firebaseCrashlyticsBuildtools = "3.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +49,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 line = { module = "com.github.tehras.charts:line", version.ref = "bar" }
 pie = { module = "com.github.tehras.charts:pie", version.ref = "pie" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
