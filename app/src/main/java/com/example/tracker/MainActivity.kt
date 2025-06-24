@@ -60,10 +60,10 @@ class MainActivity : ComponentActivity() {
         )
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-        if (currentUserId != null) {
-            seed60ActivityDocuments(Firebase.firestore, currentUserId)
-        }
+//        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+//        if (currentUserId != null) {
+//            seed60ActivityDocuments(Firebase.firestore, currentUserId)
+//        }
 //        if (currentUserId != null) {
 ////            seedFakeProgressData(Injection.instance(), currentUserId)
 //            val firestore = FirebaseFirestore.getInstance()
