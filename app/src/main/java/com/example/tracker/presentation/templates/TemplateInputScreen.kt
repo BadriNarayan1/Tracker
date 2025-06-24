@@ -3,6 +3,8 @@ package com.example.tracker.presentation.templates
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -91,27 +93,35 @@ fun DayTemplateForm(viewModel: TemplateInputViewModel, activityViewModel: Activi
     val sortedActivities = activities.value.sortedBy {
         LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("hh:mm a"))
     }
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(16.dp)
+    ) {
         items(sortedActivities) { activity ->
             ActivityRow(activity) { viewModel.removeDayActivity(activity) }
         }
+
+        item { Spacer(Modifier.height(8.dp)) }
+        item {
+            Button(onClick = { viewModel.showDialog = true }) {
+                Text("Add Activity")
+            }
+        }
+        item { Spacer(Modifier.height(8.dp)) }
+        item {
+            Button(onClick = { onSave(viewModel.buildDayTemplate()) }) {
+                Text("Save Day Template")
+            }
+        }
     }
 
-    Spacer(Modifier.height(8.dp))
-    Button(onClick = { viewModel.showDialog = true }) { Text("Add Activity") }
-    Spacer(Modifier.height(8.dp))
-    Button(onClick = {
-        onSave(viewModel.buildDayTemplate())
-    }) { Text("Save Day Template") }
-
-    if (showDialog) {
-        AddOrUpdateActivityDialog(
-            viewModel = activityViewModel,
-            onDismiss = { viewModel.showDialog = false },
-            onSave = { viewModel.addDayActivity(it) }
-        )
-    }
+        if (showDialog) {
+            AddOrUpdateActivityDialog(
+                viewModel = activityViewModel,
+                onDismiss = { viewModel.showDialog = false },
+                onSave = { viewModel.addDayActivity(it) }
+            )
+        }
 }
 
 @Composable
@@ -127,7 +137,8 @@ fun WeekTemplateForm(viewModel: TemplateInputViewModel, activityViewModel: Activ
         LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("hh:mm a"))
     }
 
-    Column {
+
+    Column() {
         ScrollableTabRow(selectedTabIndex = selectedDayIndex) {
             days.forEachIndexed { i, day ->
                 Tab(
@@ -138,20 +149,33 @@ fun WeekTemplateForm(viewModel: TemplateInputViewModel, activityViewModel: Activ
             }
         }
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(sortedActivities) { activity ->
                 ActivityRow(activity) {
                     viewModel.removeWeekActivity(currentDay, activity)
                 }
             }
+
+            item {
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = { viewModel.showDialog = true }) {
+                    Text("Add Activity to $currentDay")
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = {
+                    onSave(viewModel.buildWeekTemplate())
+                }) {
+                    Text("Save Week Template")
+                }
+            }
         }
 
-        Spacer(Modifier.height(8.dp))
-        Button(onClick = { viewModel.showDialog = true }) { Text("Add Activity to $currentDay") }
-        Spacer(Modifier.height(8.dp))
-        Button(onClick = {
-            onSave(viewModel.buildWeekTemplate())
-        }) { Text("Save Week Template") }
     }
 
     if (showDialog) {
